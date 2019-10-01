@@ -1,0 +1,37 @@
+{
+    "version": "2.0.0",
+    "plain": {
+        "actionId": "get_spec",
+        "responseText": {
+            "$ref": "#/encrypted/0"
+        },
+        "packetId": {
+            "$ref": "#/encrypted/1"
+        },
+        "integrationId": "98792bcb-a936-4980-a13d-9531de88ab49"
+    },
+    "encrypted": {
+        "recipients": [
+            {
+                "encrypted_key": "R51a-VaxAxJotXAvyXBOR3fcfgqbG6CZt8HRabizT09CioxLdohDI0BX_GXTug3ZI9j3Pbe8vjMv-SHivfHl2VCk3F_QPse7A_s2Pl3Exbc4DecnW07qy-yI2--MXq_qIaAjJysoquqXAS1akglsE44l05mjBCFh2rGrZVv6iyGj6O64wntJVHftydHXF3d1Duj1GZ5t1j8mCqHbphPjVm43jwAgGDXwMbdbPmJPUl50C95zS9FI0jwNhbPia_pUlZ8E4bXq70fgVDoISpWnH6zMg_MRgdInKgiaKx0IUbadldU1rWzmnpYjRXRwwvsdTEeA1MX96V_RiaYE2gnFOzKCteWastM3qpfNT1G_Zw5kxiO91Ydp2QiY1PTriYKhc6iG4VrkhrAMGfF_K49tAw2DaUgeBheYuPZLNGw5zKpj7n1MH-RXLFwZEP_SzMq_bFIaKwgfBtmxa8_yCwslNvYNadYevEHjp4MkTVQOOwOAfNtFHz-7IdBlR-dYQlwg_29fdPxMcCxCSjTz7Vk-7yTYYEpOub-qcTKEq0xe12jqslFHJio0jXuQ2COKXbVyxijJo62s5VhldOgurxKfBRd9tAHM9ZsqtNk2ruhJuHBzFHtZ0SG_TkviXVmBjDiAtuQVn7mTGGiq7HEPOPC5MpbEeLSq9GOiiXV2iVsgUcY",
+                "header": {
+                    "alg": "RSA-OAEP",
+                    "kid": "6UMndEzTDl6lRLQDLrwu9zkQfuUgZW--SHsJBOp0-iA"
+                }
+            },
+            {
+                "encrypted_key": "KRdc8En_QghtziS_PKpsD7fLhrYmtRnN9OuZ90SWpd9QXT8mebYui9RDXbcN3rkSpjhNw_Xg2xwouaX0XDbCXopTl99XCIzx_hg9y90FxP7jfhC7_0ZUDgLBXoQvHvFUUk8S8VBrwFJ8zUoXO-fJWaPUb5z0A5in8QLoAbCn63zpsDpVVP-F4ylH1n315gIrPfBF9qZr_3ijaW-kp7L7z1fwkTDzdGyXGlAJBoxD5me5UfY3AYGRTcdRGYF8RgXNGIRsEEhFC4JjBwCtSVha8_-QwdsKQmdVeLzFfLJ_VpVFR-aYvlWlndoev1teVcx7wGdWXBmKGNNcHpcQVpgWK9VleyI19OUQ6n2Cawa40WuA6lrtT3va9nCEpx02cpB2BRvxbBqemnBvzLX8UrYNLQlP0zfkWWEhxyBvWvY9Jeca8P8MNLdZHUtbm2pBY8iheCDL5dHOh2iTE5mrDCfejITX7gVvC-On9kDWSHKXA0Adm40mq_OEkj9NpNENAZ_2RsaVNVUYboH-FSyOsQEVk5uBzPwGhgZAt0_Vbs7g2rnrHSIqrePQEaeqWZWRJkDICzVe1J46z-lhbf-cL8-pOmBqz1n90jXVl38gQNht1WNnjT8Tff5DjkZL7TpDWXiwFpi3_tf_1uAPCENLyvgLAoqzfWjRDQRxkGf6oSZ2vDQ",
+                "header": {
+                    "alg": "RSA-OAEP",
+                    "kid": "T8ixWoHI3a2vanx3pAaE7r5Ou0g6fJosN1M1BNk4cVU"
+                }
+            }
+        ],
+        "unprotected": {
+            "enc": "A256CBC-HS512"
+        },
+        "iv": "HsgrewLgxXUlroHifogj0Q",
+        "ciphertext": "P_eH1FhBbNOMQGiWJ2UPHQ3j-ZZuhv0wmEHFcobAUCnq7nukY81t8Mkp-LKdO3Za",
+        "tag": "BlymSs-Hv0bNzSmDy3Z4E6PckdFo4kGWYsxRqvqnjLg"
+    }
+}
