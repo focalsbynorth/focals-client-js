@@ -6,7 +6,7 @@ The Focals Developer API, Developer Portal, and Client Library are in alpha and 
 
 ## Usage
 Install the library using:  
-`npm i fda-client`
+`npm i @bynorth/fda-client`
 
 ### Init
 Before using the library, call the `init` function during your startup code. To make full use of the library, you need to provide your API Key and Secret, your ability's Integration ID, as well as your Shared Secret and your Private Key:  
