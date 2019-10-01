@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "plain": {
+        "actionId": "get_spec",
+        "responseText": {
+            "$ref": "#/encrypted/0"
+        },
+        "packetId": {
+            "$ref": "#/encrypted/1"
+        },
+        "integrationId": "98792bcb-a936-4980-a13d-9531de88ab49"
+    },
+    "encrypted": {
+        "encrypted_key": "R51a-VaxAxJotXAvyXBOR3fcfgqbG6CZt8HRabizT09CioxLdohDI0BX_GXTug3ZI9j3Pbe8vjMv-SHivfHl2VCk3F_QPse7A_s2Pl3Exbc4DecnW07qy-yI2--MXq_qIaAjJysoquqXAS1akglsE44l05mjBCFh2rGrZVv6iyGj6O64wntJVHftydHXF3d1Duj1GZ5t1j8mCqHbphPjVm43jwAgGDXwMbdbPmJPUl50C95zS9FI0jwNhbPia_pUlZ8E4bXq70fgVDoISpWnH6zMg_MRgdInKgiaKx0IUbadldU1rWzmnpYjRXRwwvsdTEeA1MX96V_RiaYE2gnFOzKCteWastM3qpfNT1G_Zw5kxiO91Ydp2QiY1PTriYKhc6iG4VrkhrAMGfF_K49tAw2DaUgeBheYuPZLNGw5zKpj7n1MH-RXLFwZEP_SzMq_bFIaKwgfBtmxa8_yCwslNvYNadYevEHjp4MkTVQOOwOAfNtFHz-7IdBlR-dYQlwg_29fdPxMcCxCSjTz7Vk-7yTYYEpOub-qcTKEq0xe12jqslFHJio0jXuQ2COKXbVyxijJo62s5VhldOgurxKfBRd9tAHM9ZsqtNk2ruhJuHBzFHtZ0SG_TkviXVmBjDiAtuQVn7mTGGiq7HEPOPC5MpbEeLSq9GOiiXV2iVsgUcY",
+        "unprotected": {
+            "enc": "A256CBC-HS512"
+        },
+        "header": {
+            "alg": "RSA-OAEP"
+        },
+        "iv": "HsgrewLgxXUlroHifogj0Q",
+        "ciphertext": "P_eH1FhBbNOMQGiWJ2UPHQ3j-ZZuhv0wmEHFcobAUCnq7nukY81t8Mkp-LKdO3Za",
+        "tag": "BlymSs-Hv0bNzSmDy3Z4E6PckdFo4kGWYsxRqvqnjLg"
+    }
+}

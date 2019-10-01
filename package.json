@@ -1,0 +1,62 @@
+{
+  "name": "@focals-by-north/fda-client",
+  "version": "0.1.1",
+  "description": "Client library used to integrate with the Focals Developer APIs",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint index.js lib test",
+    "lint:junit": "eslint --format junit -o coverage/lint-results.xml index.js lib test",
+    "lint:fix": "eslint --fix index.js lib test",
+    "lint:todo": "! grep -Eir --exclude-dir node_modules --include '*.js' '(TODO|FIXME|HACK)' .",
+    "test": "mocha --color --recursive test",
+    "test:junit": "mocha --color --recursive --reporter mocha-junit-reporter --reporter-options mochaFile=coverage/test-results.xml test",
+    "test:cover": "nyc npm run test",
+    "package:lint": "depcheck --ignores='depcheck,nyc,eslint,mocha,mocha-junit-reporter' --specials=mocha",
+    "package:outdated": "npm outdated"
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary",
+      "cobertura"
+    ],
+    "include": [
+      "lib/**/*.js",
+      "index.js"
+    ],
+    "cache": false,
+    "check-coverage": true,
+    "per-file": true,
+    "lines": 80,
+    "statements": 80,
+    "functions": 75,
+    "branches": 80,
+    "temp-directory": "coverage/nyc_output"
+  },
+  "keywords": [
+    "north",
+    "focals"
+  ],
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "depcheck": "^0.7.1",
+    "eslint": "^5.12.1",
+    "faker": "^4.1.0",
+    "mocha": "^5.2.0",
+    "mocha-junit-reporter": "^1.18.0",
+    "nyc": "^13.2.0",
+    "proxyquire": "^2.1.3",
+    "sinon": "^7.2.3"
+  },
+  "author": "North Inc.",
+  "license": "ISC",
+  "dependencies": {
+    "json-refs": "^3.0.13",
+    "jsonpointer": "^4.0.1",
+    "node-jose": "^1.1.3",
+    "node-rsa": "^1.0.5",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7"
+  }
+}
