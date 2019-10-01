@@ -1,3 +1,5 @@
+**THIS IS AN ALPHA RELEASE**
+
 # Focals Developer API Client Library
 
 This library is designed to help make the process of creating Abilities for Focals easier by making it simpler to encrypt and decrypt content, retrieve public keys for users, and URL generation for interacting with the Focals Developer API.
