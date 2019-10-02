@@ -54,7 +54,7 @@ const encryptionService = require('@bynorth/focals-client-js').EncryptionService
 const encryptedPacket = encryptionService.encryptPacket(input, pathsToEncrypt, publicKeys);
 ```
 
-Further information on how end-to-end encryption works can be found here: [https://github.com/focalsbynorth/abilities-library/docs/encryption.md](https://github.com/focalsbynorth/abilities-library/docs/encryption.md)
+Further information on how end-to-end encryption works can be found here: [https://focalsbynorth.github.io/focals-api-docs/encryption.html](https://focalsbynorth.github.io/focals-api-docs/encryption.html)
 
 #### Decryption
 To decrypt a packet you call the `decryptPacket` function, passing in as a parameter the encrypted packet object. This function will use the private key that was set during `init`.  
