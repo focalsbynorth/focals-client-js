@@ -1,6 +1,6 @@
 {
   "name": "@bynorth/focals-client-js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Client library used to integrate with the Focals Developer APIs",
   "main": "index.js",
   "scripts": {
@@ -52,6 +52,7 @@
   "author": "North Inc.",
   "license": "ISC",
   "dependencies": {
+    "egads": "^1.0.2",
     "json-refs": "^3.0.13",
     "jsonpointer": "^4.0.1",
     "node-jose": "^1.1.3",
