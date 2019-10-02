@@ -8,12 +8,12 @@ The Focals Developer API, Developer Portal, and Client Library are in alpha and 
 
 ## Usage
 Install the library using:  
-`npm i @bynorth/fda-client`
+`npm i @bynorth/focals-client-js`
 
 ### Init
 Before using the library, call the `init` function during your startup code. To make full use of the library, you need to provide your API Key and Secret, your ability's Integration ID, as well as your Shared Secret and your Private Key:  
 ```
-const configInit = require('north-client-library').init;
+const configInit = require('@bynorth/focals-client-js').init;
 configInit({
                 apiSecret: '<YOUR API SECRET>',
                 apiKey: '<YOUR API KEY>',
@@ -35,7 +35,7 @@ This option will be used when future signing versions are introduced, however th
 In order to perform encryption you need to have the public key for the intended recipient. In order to simplify this process, you can use the provided `DeviceKeysService`.  
 Simply pass the `userId` of the user (received as part of the enable flow), and the service will make the web request and return an array of retrieved public keys:  
 ```
-const deviceKeysService = require('north-client-library').DeviceKeysService;
+const deviceKeysService = require('@bynorth/focals-client-js').DeviceKeysService;
 
 const publicKeys = deviceKeysService.getPublicKeys('userId');
 ```
@@ -49,7 +49,7 @@ To encrypt a packet you call the `encryptPacket` function, passing in as paramet
 - An array of JSON pointers on the packet to encrypt, following [RFC-6901](https://tools.ietf.org/html/rfc6901)
 - An array of public keys to use for encryption (retrieved using the above `DeviceKeysService` in this library)
 ```
-const encryptionService = require('north-client-library').EncryptionService;
+const encryptionService = require('@bynorth/focals-client-js').EncryptionService;
 
 const encryptedPacket = encryptionService.encryptPacket(input, pathsToEncrypt, publicKeys);
 ```
@@ -60,7 +60,7 @@ Further information on how end-to-end encryption works can be found here: [https
 To decrypt a packet you call the `decryptPacket` function, passing in as a parameter the encrypted packet object. This function will use the private key that was set during `init`.  
 If no private key is detected, an exception will be raised.
 ```
-const encryptionService = require('north-client-library').EncryptionService;
+const encryptionService = require('@bynorth/focals-client-js').EncryptionService;
 
 const decryptedPacket = encryptionService.decryptPacket(input);
 ```
@@ -72,7 +72,7 @@ Call the `verifySignature` function, passing in as parameters:
 - The received `timestamp`
 - The received `signature`
 ```
-const signatureService = require('north-client-library').SignatureService;
+const signatureService = require('@bynorth/focals-client-js').SignatureService;
 
 const isValid = signatureService.verifySignature('<RECEIVED STATE>', '<RECEIVED TIMESTAMP>', '<RECEIVED SIGNATURE>');
 ```
@@ -82,7 +82,7 @@ The function will generate the HMAC signature using the timestamp and state, and
 The `UrlService` is used to make generating URLs to interact with the Focals Developer API easier.  
 This currently consists of a builder to generate the `enable` URL to allow a user to enable your ability. To indicate a success, simply call the function passing in the previously received `state` as a parameter. If there was an error, you can pass through both the `state` and the encountered error:  
 ```
-const urlService = require('north-client-library').UrlService;
+const urlService = require('@bynorth/focals-client-js').UrlService;
 
 const enableUrl = urlService.buildEnableUrl('<STATE>');
 // Or if there was an error:
@@ -98,7 +98,7 @@ There are two ways to publish packets to users:
     - Use this to send sensitive data that has previously been encrypted using the `EncryptionService`
 Both approaches require you to pass in the targets `userId`, as well as the `packet` to publish - the packet is the object that should change depending on which approach you follow:
 ```
-const publishService = require('north-client-library').PublishService;
+const publishService = require('@bynorth/focals-client-js').PublishService;
 
 const response = publishService.publishToUser('userId', '<YOUR PACKET>');
 const encryptedResponse = publishService.encryptedPublishToUser('userId', '<YOUR ENCRYPTED PACKET>');
