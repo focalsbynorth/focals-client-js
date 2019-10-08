@@ -112,7 +112,7 @@ describe('EncryptionService', () => {
             expect(decryptedPacket.integrationId).to.be.equal('98792bcb-a936-4980-a13d-9531de88ab49');
         });
 
-        it.only('decrypts flattened JWE packet', async () => {
+        it('decrypts flattened JWE packet', async () => {
             config.init({
                 privateKey: fs.readFileSync('test/data/id_rsa.pem').toString()
             });
