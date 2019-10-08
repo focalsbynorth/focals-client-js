@@ -6,31 +6,29 @@ const chai = require('chai')
 const expect = chai.expect;
 const sinon = require('sinon');
 
-const config = require('../lib/util/config.js');
-const Err = require('../lib/util/error.js');
+const Err = require('../../lib/util/error.js');
 
 describe('DeviceKeysService', () => {
     context('getPublicKeys', () => {
-        before('init the config', () => {
-            config.init({
-                apiSecret: 'apiSecret',
-                apiKey: 'apiKey',
-                integrationId: 'integrationId',
-            });
-        });
-
         it('throws an error if the api call fails', async () => {
             const requestPromiseStub = sinon.stub();
             const deviceKeysService = proxyquire(
-                '../lib/device.keys.service.js', {
+                '../../lib/service/device.keys.service.js', {
                     'request-promise-native': requestPromiseStub
                 }
             );
 
             requestPromiseStub.throws();
 
+            const instance = new deviceKeysService({
+                apiSecret: 'apiSecret',
+                apiKey: 'apiKey',
+                integrationId: 'integrationId',
+                baseUrl: 'https://cloud.bynorth.com',
+            });
+
             await expect(
-                deviceKeysService.getPublicKeys('userId')
+                instance.getPublicKeys('userId')
             ).to.be.rejected.and.eventually.deep.equal(new Err.deviceKeys('Error during call to get device keys'));
 
             expect(requestPromiseStub.calledOnceWith({
@@ -49,7 +47,7 @@ describe('DeviceKeysService', () => {
         it('returns response if the api call is successful', async () => {
             const requestPromiseStub = sinon.stub();
             const deviceKeysService = proxyquire(
-                '../lib/device.keys.service.js', {
+                '../../lib/service/device.keys.service.js', {
                     'request-promise-native': requestPromiseStub
                 }
             );
@@ -57,7 +55,14 @@ describe('DeviceKeysService', () => {
             const responseMock = ['key1', 'key2'];
             requestPromiseStub.resolves(responseMock);
 
-            const response = await deviceKeysService.getPublicKeys('userId');
+            const instance = new deviceKeysService({
+                apiSecret: 'apiSecret',
+                apiKey: 'apiKey',
+                integrationId: 'integrationId',
+                baseUrl: 'https://cloud.bynorth.com',
+            });
+
+            const response = await instance.getPublicKeys('userId');
 
             expect(response).to.deep.equal(['key1', 'key2']);
 
