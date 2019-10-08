@@ -14,16 +14,28 @@ Install the library using:
 Before using the library, call the `init` function during your startup code. To make full use of the library, you need to provide your API Key and Secret, your ability's Integration ID, as well as your Shared Secret and your Private Key:  
 ```
 const configInit = require('@bynorth/focals-client-js').init;
-configInit({
-                apiSecret: '<YOUR API SECRET>',
-                apiKey: '<YOUR API KEY>',
-                sharedSecret: '<YOUR SHARED SECRET>',
-                privateKey: '<YOUR PRIVATE KEY>',
-                integrationId: '<YOUR INTEGRATION ID>',
-            });
+configInit(
+    abilityName: {
+        apiSecret: '<YOUR API SECRET>',
+        apiKey: '<YOUR API KEY>',
+        sharedSecret: '<YOUR SHARED SECRET>',
+        privateKey: '<YOUR PRIVATE KEY>',
+        integrationId: '<YOUR INTEGRATION ID>',
+    }
+);
 ```
 This is done to to store the values in an object in the library, to reduce the number of parameters passed to each function.  
 The values you need can be found on the ability page on the [Developer Portal](https://developer.bynorth.com)
+
+Once successfully initialized you can then retrieve the instance wherever needed by providing the name of the configured ability:
+```
+const ability = require('@bynorth/focals-client-js').get('abilityName');
+```
+If you've confiugred a single ability instead of multiple, you don't need to provide the name of the ability:
+```
+const ability = require('@bynorth/focals-client-js').get();
+```
+However if you omit the parameter and multiple abilities are configured, an exception will be raised.
 
 #### Optional Values
 **baseUrl**   
@@ -32,12 +44,12 @@ This is reserved in the event that test environments are opened up to external d
 This option will be used when future signing versions are introduced, however there is only one option available at present, so the value doesn't need to be set
 
 ### Device Keys
-In order to perform encryption you need to have the public key for the intended recipient. In order to simplify this process, you can use the provided `DeviceKeysService`.  
+In order to perform encryption you need to have the public key for the intended recipient. In order to simplify this process, you can use the provided `deviceKeysService`.  
 Simply pass the `userId` of the user (received as part of the enable flow), and the service will make the web request and return an array of retrieved public keys:  
 ```
-const deviceKeysService = require('@bynorth/focals-client-js').DeviceKeysService;
+const ability = require('@bynorth/focals-client-js').get('abilityName');
 
-const publicKeys = deviceKeysService.getPublicKeys('userId');
+const publicKeys = ability.deviceKeysService.getPublicKeys('userId');
 ```
 
 ### Encryption/Decryption
@@ -47,11 +59,11 @@ This library includes functionality to ease the implementation of end-to-end enc
 To encrypt a packet you call the `encryptPacket` function, passing in as parameters:
 - The packet object
 - An array of JSON pointers on the packet to encrypt, following [RFC-6901](https://tools.ietf.org/html/rfc6901)
-- An array of public keys to use for encryption (retrieved using the above `DeviceKeysService` in this library)
+- An array of public keys to use for encryption (retrieved using the above `deviceKeysService` in this library)
 ```
-const encryptionService = require('@bynorth/focals-client-js').EncryptionService;
+const ability = require('@bynorth/focals-client-js').get('abilityName');
 
-const encryptedPacket = encryptionService.encryptPacket(input, pathsToEncrypt, publicKeys);
+const encryptedPacket = ability.encryptionService.encryptPacket(input, pathsToEncrypt, publicKeys);
 ```
 
 Further information on how end-to-end encryption works can be found here: [https://focalsbynorth.github.io/focals-api-docs/encryption.html](https://focalsbynorth.github.io/focals-api-docs/encryption.html)
@@ -60,46 +72,46 @@ Further information on how end-to-end encryption works can be found here: [https
 To decrypt a packet you call the `decryptPacket` function, passing in as a parameter the encrypted packet object. This function will use the private key that was set during `init`.  
 If no private key is detected, an exception will be raised.
 ```
-const encryptionService = require('@bynorth/focals-client-js').EncryptionService;
+const ability = require('@bynorth/focals-client-js').get('abilityName');
 
-const decryptedPacket = encryptionService.decryptPacket(input);
+const decryptedPacket = ability.encryptionService.decryptPacket(input);
 ```
 
 ### Signature Verification
-The `SignatureService` provides a way to easily verify signatures received. To use this functionality you need to have configured your shared secret during `init`.  
+The `signatureService` provides a way to easily verify signatures received. To use this functionality you need to have configured your shared secret during `init`.  
 Call the `verifySignature` function, passing in as parameters:
 - The received `state`
 - The received `timestamp`
 - The received `signature`
 ```
-const signatureService = require('@bynorth/focals-client-js').SignatureService;
+const ability = require('@bynorth/focals-client-js').get('abilityName');
 
-const isValid = signatureService.verifySignature('<RECEIVED STATE>', '<RECEIVED TIMESTAMP>', '<RECEIVED SIGNATURE>');
+const isValid = ability.signatureService.verifySignature('<RECEIVED STATE>', '<RECEIVED TIMESTAMP>', '<RECEIVED SIGNATURE>');
 ```
 The function will generate the HMAC signature using the timestamp and state, and your configured shared secret, and verify the received signature against that. The function will return a boolean value to indicate whether or not the signature is valid.
 
 ### URLs
-The `UrlService` is used to make generating URLs to interact with the Focals Developer API easier.  
+The `urlService` is used to make generating URLs to interact with the Focals Developer API easier.  
 This currently consists of a builder to generate the `enable` URL to allow a user to enable your ability. To indicate a success, simply call the function passing in the previously received `state` as a parameter. If there was an error, you can pass through both the `state` and the encountered error:  
 ```
-const urlService = require('@bynorth/focals-client-js').UrlService;
+const ability = require('@bynorth/focals-client-js').get('abilityName');
 
-const enableUrl = urlService.buildEnableUrl('<STATE>');
+const enableUrl = ability.urlService.buildEnableUrl('<STATE>');
 // Or if there was an error:
-const enableUrl = urlService.buildEnableUrl('<STATE>', '<ERROR>');
+const enableUrl = ability.urlService.buildEnableUrl('<STATE>', '<ERROR>');
 ```
 
 ### Publishing Packets to Users
-The `PublishService` is used to handle publishing packets to users through the Focals Developer API possible with minimal effort.
+The `publishService` is used to handle publishing packets to users through the Focals Developer API possible with minimal effort.
 There are two ways to publish packets to users:
 - Standard
     - This is used when there is no personally identifiable information in your packets
 - Encrypted
-    - Use this to send sensitive data that has previously been encrypted using the `EncryptionService`
+    - Use this to send sensitive data that has previously been encrypted using the `encryptionService`
 Both approaches require you to pass in the targets `userId`, as well as the `packet` to publish - the packet is the object that should change depending on which approach you follow:
 ```
-const publishService = require('@bynorth/focals-client-js').PublishService;
+const ability = require('@bynorth/focals-client-js').get('abilityName');
 
-const response = publishService.publishToUser('userId', '<YOUR PACKET>');
-const encryptedResponse = publishService.encryptedPublishToUser('userId', '<YOUR ENCRYPTED PACKET>');
+const response = ability.publishService.publishToUser('userId', '<YOUR PACKET>');
+const encryptedResponse = ability.publishService.encryptedPublishToUser('userId', '<YOUR ENCRYPTED PACKET>');
 ```
