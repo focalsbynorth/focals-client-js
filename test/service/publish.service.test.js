@@ -6,31 +6,29 @@ const chai = require('chai')
 const expect = chai.expect;
 const sinon = require('sinon');
 
-const config = require('../lib/util/config.js');
-const Err = require('../lib/util/error.js');
+const Err = require('../../lib/util/error.js');
 
 describe('PublishService', () => {
-    before('init the config', () => {
-        config.init({
-            apiSecret: 'apiSecret',
-            apiKey: 'apiKey',
-            integrationId: 'integrationId'
-        });
-    });
-
     context('publishToUser', () => {
         it('throws an error if the api call fails', async () => {
             const requestPromiseStub = sinon.stub();
             const publishService = proxyquire(
-                '../lib/publish.service.js', {
+                '../../lib/service/publish.service.js', {
                     'request-promise-native': requestPromiseStub
                 }
             );
 
             requestPromiseStub.throws();
 
+            const instance = new publishService({
+                apiSecret: 'apiSecret',
+                apiKey: 'apiKey',
+                integrationId: 'integrationId',
+                baseUrl: 'https://cloud.bynorth.com'
+            });
+
             await expect(
-                publishService.publishToUser('userId', 'packet')
+                instance.publishToUser('userId', 'packet', 'test')
             ).to.be.rejected.and.eventually.deep.equal(new Err.publishToUser('Error during call to publish packet to user'));
 
             expect(requestPromiseStub.calledOnceWith({
@@ -50,15 +48,22 @@ describe('PublishService', () => {
         it('returns response if the api call is successful', async () => {
             const requestPromiseStub = sinon.stub();
             const publishService = proxyquire(
-                '../lib/publish.service.js', {
+                '../../lib/service/publish.service.js', {
                     'request-promise-native': requestPromiseStub
                 }
             );
 
+            const instance = new publishService({
+                apiSecret: 'apiSecret',
+                apiKey: 'apiKey',
+                integrationId: 'integrationId',
+                baseUrl: 'https://cloud.bynorth.com'
+            });
+
             const responseMock = { status: 'OK' };
             requestPromiseStub.resolves(responseMock);
 
-            const response = await publishService.publishToUser('userId', 'packet');
+            const response = await instance.publishToUser('userId', 'packet', 'test');
 
             expect(response).to.deep.equal(responseMock);
 
@@ -81,15 +86,22 @@ describe('PublishService', () => {
         it('throws an error if the api call fails', async () => {
             const requestPromiseStub = sinon.stub();
             const publishService = proxyquire(
-                '../lib/publish.service.js', {
+                '../../lib/service/publish.service.js', {
                     'request-promise-native': requestPromiseStub
                 }
             );
 
+            const instance = new publishService({
+                apiSecret: 'apiSecret',
+                apiKey: 'apiKey',
+                integrationId: 'integrationId',
+                baseUrl: 'https://cloud.bynorth.com'
+            });
+
             requestPromiseStub.throws();
             const error = new Err.encryptedPublishToUser('Error during call to publish an encrypted packet to user');
             await expect(
-                publishService.encryptedPublishToUser('userId', 'encryptedPacket')
+                instance.encryptedPublishToUser('userId', 'encryptedPacket', 'test')
             ).to.be.rejected.and.eventually.deep.equal(error);
 
             expect(requestPromiseStub.calledOnceWith({
@@ -109,15 +121,22 @@ describe('PublishService', () => {
         it('returns response if the api call is successful', async () => {
             const requestPromiseStub = sinon.stub();
             const publishService = proxyquire(
-                '../lib/publish.service.js', {
+                '../../lib/service/publish.service.js', {
                     'request-promise-native': requestPromiseStub
                 }
             );
 
+            const instance = new publishService({
+                apiSecret: 'apiSecret',
+                apiKey: 'apiKey',
+                integrationId: 'integrationId',
+                baseUrl: 'https://cloud.bynorth.com'
+            });
+
             const responseMock = { status: 'OK' };
             requestPromiseStub.resolves(responseMock);
 
-            const response = await publishService.encryptedPublishToUser('userId', 'encryptedPacket');
+            const response = await instance.encryptedPublishToUser('userId', 'encryptedPacket', 'test');
 
             expect(response).to.deep.equal(responseMock);
 

@@ -5,9 +5,8 @@ const chai = require('chai')
 const expect = chai.expect;
 const fs = require('fs');
 
-const EncryptionService = require('../lib/encryption.service.js');
-const Err = require('../lib/util/error.js');
-const config = require('../lib/util/config.js');
+const EncryptionService = require('../../lib/service/encryption.service.js');
+const Err = require('../../lib/util/error.js');
 
 describe('EncryptionService', () => {
     context('encryptPacket', () => {
@@ -22,7 +21,9 @@ describe('EncryptionService', () => {
                 '/actionId',
             ];
 
-            const encryptedPacket = await EncryptionService.encryptPacket(inputObject, pathsToEncrypt, publicKeys);
+            const instance = new EncryptionService();
+
+            const encryptedPacket = await instance.encryptPacket(inputObject, pathsToEncrypt, publicKeys);
 
             expect(encryptedPacket.hasOwnProperty('encrypted')).to.be.true;
             expect(encryptedPacket.plain.templateId.$ref).to.be.equal('#/encrypted/0');
@@ -40,7 +41,9 @@ describe('EncryptionService', () => {
             const inputObject = JSON.parse(inputString);
             const pathsToEncrypt = [];
 
-            const encryptedPacket = await EncryptionService.encryptPacket(inputObject, pathsToEncrypt, publicKeys);
+            const instance = new EncryptionService();
+
+            const encryptedPacket = await instance.encryptPacket(inputObject, pathsToEncrypt, publicKeys);
 
             expect(encryptedPacket.hasOwnProperty('encrypted')).to.be.true;
             expect(encryptedPacket.plain.templateId).to.be.equal('cc16cc5e-1623-4ba0-bacd-df1f7be9e023');
@@ -61,9 +64,11 @@ describe('EncryptionService', () => {
                 '/invalid',
             ];
 
+            const instance = new EncryptionService();
+
             const error = new Err.encryptionBadPath('A path to encrypt was provided that could not be found: /invalid');
             await expect(
-                EncryptionService.encryptPacket(inputObject, pathsToEncrypt, publicKeys)
+                instance.encryptPacket(inputObject, pathsToEncrypt, publicKeys)
             ).to.be.rejected.and.eventually.deep.equal(error);
         });
 
@@ -76,8 +81,10 @@ describe('EncryptionService', () => {
                 '/actionId'
             ];
 
+            const instance = new EncryptionService();
+
             await expect(
-                EncryptionService.encryptPacket(inputObject, pathsToEncrypt, null)
+                instance.encryptPacket(inputObject, pathsToEncrypt, null)
             ).to.be.rejected.and.eventually.deep.equal(new Err.publicKeys());
         });
 
@@ -90,21 +97,24 @@ describe('EncryptionService', () => {
                 '/actionId'
             ];
 
+            const instance = new EncryptionService();
+
             await expect(
-                EncryptionService.encryptPacket(null, pathsToEncrypt, publicKeys)
+                instance.encryptPacket(null, pathsToEncrypt, publicKeys)
             ).to.be.rejected.and.eventually.deep.equal(new Err.encryptionBadInput());
         });
     });
 
     context('decryptPacket', () => {
         it('decrypts values', async () => {
-            config.init({
-                privateKey: fs.readFileSync('test/data/id_rsa.pem').toString()
-            });
             const inputString = fs.readFileSync('test/data/encrypted.json').toString();
             const inputObject = JSON.parse(inputString);
 
-            const decryptedPacket = await EncryptionService.decryptPacket(inputObject);
+            const instance = new EncryptionService({
+                privateKey: fs.readFileSync('test/data/id_rsa.pem').toString()
+            });
+
+            const decryptedPacket = await instance.decryptPacket(inputObject);
 
             expect(decryptedPacket.actionId).to.be.equal('get_spec');
             expect(decryptedPacket.responseText).to.be.equal('Response Text');
@@ -113,13 +123,14 @@ describe('EncryptionService', () => {
         });
 
         it('decrypts flattened JWE packet', async () => {
-            config.init({
-                privateKey: fs.readFileSync('test/data/id_rsa.pem').toString()
-            });
             const inputString = fs.readFileSync('test/data/encrypted-flattened.json').toString();
             const inputObject = JSON.parse(inputString);
 
-            const decryptedPacket = await EncryptionService.decryptPacket(inputObject);
+            const instance = new EncryptionService({
+                privateKey: fs.readFileSync('test/data/id_rsa.pem').toString()
+            });
+
+            const decryptedPacket = await instance.decryptPacket(inputObject);
 
             expect(decryptedPacket.actionId).to.be.equal('get_spec');
             expect(decryptedPacket.responseText).to.be.equal('Response Text');
@@ -127,19 +138,33 @@ describe('EncryptionService', () => {
             expect(decryptedPacket.integrationId).to.be.equal('98792bcb-a936-4980-a13d-9531de88ab49');
         });
 
-        it('throws an exception if no private key is provided', async () => {
-            config.options.privateKey = '';
+        it('throws an exception if no config is provided', async () => {
             const inputString = fs.readFileSync('test/data/encrypted.json').toString();
             const inputObject = JSON.parse(inputString);
 
+            const instance = new EncryptionService();
+
             await expect(
-                EncryptionService.decryptPacket(inputObject)
+                instance.decryptPacket(inputObject)
+            ).to.be.rejected.and.eventually.deep.equal(new Err.privateKey());
+        });
+
+        it('throws an exception if no private key is provided', async () => {
+            const inputString = fs.readFileSync('test/data/encrypted.json').toString();
+            const inputObject = JSON.parse(inputString);
+
+            const instance = new EncryptionService({});
+
+            await expect(
+                instance.decryptPacket(inputObject)
             ).to.be.rejected.and.eventually.deep.equal(new Err.privateKey());
         });
 
         it('throws an exception if no input is provided', async () => {
+            const instance = new EncryptionService();
+
             await expect(
-                EncryptionService.decryptPacket(null)
+                instance.decryptPacket(null)
             ).to.be.rejected.and.eventually.deep.equal(new Err.encryptionBadInput());
         });
     });

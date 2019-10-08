@@ -2,16 +2,13 @@
 
 const crypto = require('crypto');
 
-const config = require('../lib/util/config.js');
-const SignatureService = require('../lib/signature.service.js');
+const SignatureService = require('../../lib/service/signature.service.js');
 
 describe('SignatureService', () => {
     context('verifySignature', () => {
-        before('init the config', () => {
-            config.init({
-                signingVersion: 'signingVersion',
-                sharedSecret: 'sharedSecret'
-            });
+        const instance = new SignatureService({
+            signingVersion: 'signingVersion',
+            sharedSecret: 'sharedSecret'
         });
 
         it('returns true for a valid signature with timestamp in milliseconds', () => {
@@ -21,10 +18,11 @@ describe('SignatureService', () => {
                 .digest('hex');
             const expected = `signingVersion:${computedHmac}`;
 
-            const valid = SignatureService.verifySignature(
+            const valid = instance.verifySignature(
                 'state',
                 timestamp,
-                expected);
+                expected,
+                'test');
 
             valid.should.be.true;
         });
@@ -36,10 +34,11 @@ describe('SignatureService', () => {
                 .digest('hex');
             const expected = `signingVersion:${computedHmac}`;
 
-            const valid = SignatureService.verifySignature(
+            const valid = instance.verifySignature(
                 'state',
                 timestamp,
-                expected);
+                expected,
+                'test');
 
             valid.should.be.true;
         });
@@ -53,10 +52,11 @@ describe('SignatureService', () => {
 
             const invalidTimestamp = Date.now() + 1;
 
-            const valid = SignatureService.verifySignature(
+            const valid = instance.verifySignature(
                 'state',
                 invalidTimestamp,
-                expected);
+                expected,
+                'test');
 
             valid.should.be.false;
         });
@@ -68,10 +68,11 @@ describe('SignatureService', () => {
                 .digest('hex');
             const expected = `signingVersion:${computedHmac}`;
 
-            const valid = SignatureService.verifySignature(
+            const valid = instance.verifySignature(
                 'invalidState',
                 timestamp,
-                expected);
+                expected,
+                'test');
 
             valid.should.be.false;
         });
@@ -83,10 +84,11 @@ describe('SignatureService', () => {
                 .digest('hex');
             const expected = `signingVersion:${computedHmac}`;
 
-            const valid = SignatureService.verifySignature(
+            const valid = instance.verifySignature(
                 'state',
                 timestamp,
-                expected);
+                expected,
+                'test');
 
             valid.should.be.false;
         });
@@ -98,10 +100,11 @@ describe('SignatureService', () => {
                 .digest('hex');
             const expected = `signingVersion:${computedHmac}`;
 
-            const valid = SignatureService.verifySignature(
+            const valid = instance.verifySignature(
                 'state',
                 timestamp,
-                expected);
+                expected,
+                'test');
 
             valid.should.be.false;
         });

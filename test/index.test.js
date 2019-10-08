@@ -4,21 +4,17 @@ require('chai')
     .use(require('chai-as-promised'))
     .should();
 
-const NorthClientLibrary = require('../index.js');
+const FocalsClient = require('../index.js');
 
 describe('Index', () => {
     context('Exports', () => {
         it('Only exports correct items', () => {
-            NorthClientLibrary.should.be.an('object');
-            Object.keys(NorthClientLibrary).length.should.equal(6);
-            Object.keys(NorthClientLibrary).should.eql(
+            FocalsClient.should.be.an('object');
+            Object.keys(FocalsClient).length.should.equal(2);
+            Object.keys(FocalsClient).should.eql(
                 [
                     'init',
-                    'SignatureService',
-                    'UrlService',
-                    'EncryptionService',
-                    'DeviceKeysService',
-                    'PublishService',
+                    'get',
                 ]
             );
         });
